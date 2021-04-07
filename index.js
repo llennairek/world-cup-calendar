@@ -7,6 +7,7 @@ const getWorldCup2018Results = () => {
   let matchDays = [];
   let matches = [];
   let displayArray = [];
+
   axios.get(url).then((response) => {
     response.data.rounds.forEach((matchday) => {
       matchDays.push(matchday);
@@ -32,7 +33,7 @@ const getSerialScorers = () => {
   let matchDays = [];
   let matches = [];
   let scorers = {};
-  let displayArray = [];
+
   axios.get(url).then((response) => {
     response.data.rounds.forEach((matchday) => {
       matchDays.push(matchday);
@@ -45,42 +46,30 @@ const getSerialScorers = () => {
     });
 
     matches.forEach((item) => {
-      // console.log(item.goals1);
+      let goals = [];
       if (item.goals1 !== undefined) {
-        item.goals1.forEach((scorer) => {
-          let lastname = "";
-
-          if (scorer.name.split(" ").length > 1) {
-            lastname = scorer.name.split(" ")[1];
-          } else {
-            lastname = scorer.name;
-          }
-
-          if (scorers[lastname] === undefined) {
-            scorers[lastname] = 1;
-          } else {
-            scorers[lastname] = scorers[lastname] + 1;
-          }
-        });
+        goals = item.goals1;
       }
-
       if (item.goals2 !== undefined) {
-        item.goals2.forEach((scorer) => {
-          let lastname = "";
-
-          if (scorer.name.split(" ").length > 1) {
-            lastname = scorer.name.split(" ")[1];
-          } else {
-            lastname = scorer.name;
-          }
-
-          if (scorers[lastname] === undefined) {
-            scorers[lastname] = 1;
-          } else {
-            scorers[lastname] = scorers[lastname] + 1;
-          }
-        });
+        goals = [...goals, ...item.goals2];
       }
+
+      goals.forEach((scorer) => {
+        let lastname = "";
+        let scorerArray = scorer.name.split(" ");
+
+        if (scorerArray.length > 1) {
+          lastname = scorerArray[scorerArray.length - 1];
+        } else {
+          lastname = scorer.name;
+        }
+
+        if (scorers[lastname] === undefined) {
+          scorers[lastname] = 1;
+        } else {
+          scorers[lastname] = scorers[lastname] + 1;
+        }
+      });
     });
 
     let bestScorers = [];
@@ -100,5 +89,5 @@ const getSerialScorers = () => {
   });
 };
 
-getWorldCup2018Results();
+// getWorldCup2018Results();
 getSerialScorers();
