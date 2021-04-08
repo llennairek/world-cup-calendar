@@ -89,5 +89,5 @@ const getSerialScorers = () => {
   });
 };
 
-// getWorldCup2018Results();
+getWorldCup2018Results();
 getSerialScorers();
